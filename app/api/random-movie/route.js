@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
+// Disable caching for this API route
+export const fetchCache = 'force-no-store';
+
 export async function GET() {
     try {
         // Generate a random page number between 1 and 500
@@ -18,11 +21,7 @@ export async function GET() {
         if (movies.length > 0) {
             const randomMovie = movies[Math.floor(Math.random() * movies.length)];
 
-            // Disable caching completely by setting the Cache-Control header
-            const res = NextResponse.json(randomMovie);
-            res.headers.set('Cache-Control', 'no-store, max-age=0'); // Prevent caching
-
-            return res;
+            return NextResponse.json(randomMovie);
         } else {
             return NextResponse.json({ error: 'No movies found' }, { status: 404 });
         }
