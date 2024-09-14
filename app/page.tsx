@@ -45,7 +45,7 @@ export default function Home() {
   // Function to fetch a random movie from the server
   const getRandomMovie = async () => {
     try {
-      const response = await axios.get(`/api/random-movie?no_cache=${new Date().getTime()}`); // Used so that the browser doesn't cache the response
+      const response = await axios.get('/api/random-movie');
       const randomMovie = response.data;
 
       if (randomMovie) {
