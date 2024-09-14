@@ -9,7 +9,7 @@ export async function GET() {
         // Fetch popular movies from the TMDb API
         const apiKey = process.env.TMDB_API_KEY; // Use your TMDb API key from environment variables
         const response = await axios.get(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}&no_cache=${new Date().getTime()}`
+            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}`
         );
 
         const movies = response.data.results;
@@ -17,7 +17,12 @@ export async function GET() {
         // If movies were returned, pick a random one
         if (movies.length > 0) {
             const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-            return NextResponse.json(randomMovie);
+
+            // Set cache-control headers to disable caching
+            const res = NextResponse.json(randomMovie);
+            res.headers.set('Cache-Control', 'no-store'); // Disable caching completely
+
+            return res;
         } else {
             return NextResponse.json({ error: 'No movies found' }, { status: 404 });
         }
