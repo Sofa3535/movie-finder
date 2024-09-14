@@ -17,12 +17,7 @@ export async function GET() {
         // If movies were returned, pick a random one
         if (movies.length > 0) {
             const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-
-            // Set cache-control headers to disable caching
-            const res = NextResponse.json(randomMovie);
-            res.headers.set('Cache-Control', 'no-store'); // Disable caching completely
-
-            return res;
+            return NextResponse.json(randomMovie);
         } else {
             return NextResponse.json({ error: 'No movies found' }, { status: 404 });
         }
