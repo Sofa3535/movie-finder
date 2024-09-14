@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+
+// Disable caching entirely
+export const revalidate = 0;
 
 export async function GET() {
     try {
@@ -8,11 +10,18 @@ export async function GET() {
 
         // Fetch popular movies from the TMDb API
         const apiKey = process.env.TMDB_API_KEY; // Use your TMDb API key from environment variables
-        const response = await axios.get(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}`
+        const response = await fetch(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}`,
+            { cache: 'no-store' } // Ensure that the response isn't cached
         );
 
-        const movies = response.data.results;
+        // Handle errors from the TMDb API response
+        if (!response.ok) {
+            return NextResponse.json({ error: 'Failed to fetch data from TMDb' }, { status: response.status });
+        }
+
+        const data = await response.json();
+        const movies = data.results;
 
         // If movies were returned, pick a random one
         if (movies.length > 0) {

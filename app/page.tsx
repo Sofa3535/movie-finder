@@ -45,15 +45,12 @@ export default function Home() {
   // Function to fetch a random movie from the server
   const getRandomMovie = async () => {
     try {
-      // Using fetch with cache: 'no-store' to avoid caching
-      const response = await fetch(`/api/random-movie`, { cache: 'no-store' });
-      const randomMovie = await response.json();
+      const response = await axios.get('/api/random-movie');
+      const randomMovie = response.data;
 
-      if (response.ok) {
+      if (randomMovie) {
         setMovie(randomMovie);
         setError(null);
-      } else {
-        setError('Failed to fetch a random movie.');
       }
     } catch (error) {
       setError('Failed to fetch a random movie.');
