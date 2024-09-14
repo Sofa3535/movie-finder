@@ -9,7 +9,7 @@ export async function GET() {
         // Fetch popular movies from the TMDb API
         const apiKey = process.env.TMDB_API_KEY; // Use your TMDb API key from environment variables
         const response = await axios.get(
-            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}`
+            `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&page=${randomPage}&no_cache=${new Date().getTime()}`
         );
 
         const movies = response.data.results;
